@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  php-apache:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - minha-rede
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: motos
+      MYSQL_USER: user
+      MYSQL_PASSWORD: senha
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - minha-rede
+
+volumes:
+  db-data:
+
+networks:
+  minha-rede:
